@@ -1,0 +1,101 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.BasicTheme": {
+      "version": "9.1.0",
+      "isInstalled": true
+    },
+    "Volo.Abp.Account": {
+      "version": "9.1.0",
+      "isInstalled": true
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "9.1.0",
+      "isInstalled": true
+    },
+    "Volo.Abp.Identity": {
+      "version": "9.1.0",
+      "isInstalled": true
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "9.1.0",
+      "isInstalled": true
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "9.1.0",
+      "isInstalled": true
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "9.1.0",
+      "isInstalled": true
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "9.1.0",
+      "isInstalled": true
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "SeriesApp.Application": {
+      "path": "src/SeriesApp.Application/SeriesApp.Application.abppkg",
+      "folder": "src"
+    },
+    "SeriesApp.Application.Tests": {
+      "path": "test/SeriesApp.Application.Tests/SeriesApp.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "SeriesApp.Domain.Shared": {
+      "path": "src/SeriesApp.Domain.Shared/SeriesApp.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "SeriesApp.Application.Contracts": {
+      "path": "src/SeriesApp.Application.Contracts/SeriesApp.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "SeriesApp.HttpApi": {
+      "path": "src/SeriesApp.HttpApi/SeriesApp.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "SeriesApp.HttpApi.Client": {
+      "path": "src/SeriesApp.HttpApi.Client/SeriesApp.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "SeriesApp.EntityFrameworkCore.Tests": {
+      "path": "test/SeriesApp.EntityFrameworkCore.Tests/SeriesApp.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "SeriesApp.EntityFrameworkCore": {
+      "path": "src/SeriesApp.EntityFrameworkCore/SeriesApp.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "SeriesApp.TestBase": {
+      "path": "test/SeriesApp.TestBase/SeriesApp.TestBase.abppkg",
+      "folder": "test"
+    },
+    "SeriesApp.Domain.Tests": {
+      "path": "test/SeriesApp.Domain.Tests/SeriesApp.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "SeriesApp.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/SeriesApp.HttpApi.Client.ConsoleTestApp/SeriesApp.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "SeriesApp.DbMigrator": {
+      "path": "src/SeriesApp.DbMigrator/SeriesApp.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "SeriesApp.HttpApi.Host": {
+      "path": "src/SeriesApp.HttpApi.Host/SeriesApp.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "SeriesApp.Domain": {
+      "path": "src/SeriesApp.Domain/SeriesApp.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}
