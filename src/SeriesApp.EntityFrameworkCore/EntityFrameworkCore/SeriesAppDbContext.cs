@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
-using SeriesApp.Books;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -15,6 +14,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using SeriesApp.Entities;
 
 namespace SeriesApp.EntityFrameworkCore;
 
@@ -27,21 +27,14 @@ public class SeriesAppDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
-
-    public DbSet<Book> Books { get; set; }
+    public DbSet<User> AppUsers { get; set; }
+    public DbSet<Administrator> Administrators { get; set; }
+    public DbSet<Serie> Series { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<TrackingList> TrackingLists { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
 
     #region Entities from the modules
-
-    /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
-     * and replaced them for this DbContext. This allows you to perform JOIN
-     * queries for the entities of these modules over the repositories easily. You
-     * typically don't need that for other modules. But, if you need, you can
-     * implement the DbContext interface of the needed module and use ReplaceDbContext
-     * attribute just like IIdentityProDbContext and ISaasDbContext.
-     *
-     * More info: Replacing a DbContext of a module ensures that the related module
-     * uses this DbContext on runtime. Otherwise, it will use its own DbContext class.
-     */
 
     // Identity
     public DbSet<IdentityUser> Users { get; set; }
@@ -70,7 +63,6 @@ public class SeriesAppDbContext :
         base.OnModelCreating(builder);
 
         /* Include modules to your migration db context */
-
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
         builder.ConfigureBackgroundJobs();
@@ -80,22 +72,61 @@ public class SeriesAppDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureTenantManagement();
         builder.ConfigureBlobStoring();
-        
-        builder.Entity<Book>(b =>
-        {
-            b.ToTable(SeriesAppConsts.DbTablePrefix + "Books",
-                SeriesAppConsts.DbSchema);
-            b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-        });
-        
-        /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(SeriesAppConsts.DbTablePrefix + "YourEntities", SeriesAppConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        /* Configure your own tables/entities inside here */
+        builder.Entity<User>(b =>
+        {
+            b.ToTable(SeriesAppConsts.DbTablePrefix + "Users", SeriesAppConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Administrator>(b =>
+        {
+            b.ToTable(SeriesAppConsts.DbTablePrefix + "Administrators", SeriesAppConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Serie>(b =>
+        {
+            b.ToTable(SeriesAppConsts.DbTablePrefix + "Series", SeriesAppConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Notification>(b =>
+        {
+            b.ToTable(SeriesAppConsts.DbTablePrefix + "Notifications", SeriesAppConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey("UserId")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<TrackingList>(b =>
+        {
+            b.ToTable(SeriesAppConsts.DbTablePrefix + "TrackingLists", SeriesAppConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasOne(tl => tl.User)
+                .WithMany()
+                .HasForeignKey("UserId")
+                .OnDelete(DeleteBehavior.Cascade);
+            b.HasMany(tl => tl.Series)
+                .WithMany()
+                .UsingEntity(j => j.ToTable(SeriesAppConsts.DbTablePrefix + "TrackingListSeries"));
+        });
+
+        builder.Entity<Rating>(b =>
+        {
+            b.ToTable(SeriesAppConsts.DbTablePrefix + "Ratings", SeriesAppConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey("UserId")
+                .OnDelete(DeleteBehavior.Cascade);
+            b.HasOne(r => r.Serie)
+                .WithMany()
+                .HasForeignKey("SerieId")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }
