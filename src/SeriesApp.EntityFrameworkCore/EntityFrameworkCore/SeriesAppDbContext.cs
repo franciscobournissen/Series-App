@@ -21,48 +21,37 @@ namespace SeriesApp.EntityFrameworkCore;
 [ReplaceDbContext(typeof(IIdentityDbContext))]
 [ReplaceDbContext(typeof(ITenantManagementDbContext))]
 [ConnectionStringName("Default")]
-public class SeriesAppDbContext :
-    AbpDbContext<SeriesAppDbContext>,
-    ITenantManagementDbContext,
-    IIdentityDbContext
+public class SeriesAppDbContext : AbpDbContext<SeriesAppDbContext>, ITenantManagementDbContext, IIdentityDbContext
 {
-    /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    // Entidades personalizadas
     public DbSet<User> AppUsers { get; set; }
-    public DbSet<Administrator> Administrators { get; set; }
     public DbSet<Serie> Series { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<TrackingList> TrackingLists { get; set; }
     public DbSet<Rating> Ratings { get; set; }
+    public DbSet<ApiLog> ApiLogs { get; set; }
 
-    #region Entities from the modules
-
-    // Identity
+    // DbSets requeridos por IIdentityDbContext
     public DbSet<IdentityUser> Users { get; set; }
     public DbSet<IdentityRole> Roles { get; set; }
     public DbSet<IdentityClaimType> ClaimTypes { get; set; }
+    public DbSet<IdentityLinkUser> LinkUsers { get; set; }
     public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
     public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
-    public DbSet<IdentityLinkUser> LinkUsers { get; set; }
-    public DbSet<IdentityUserDelegation> UserDelegations { get; set; }
     public DbSet<IdentitySession> Sessions { get; set; }
+    public DbSet<IdentityUserDelegation> UserDelegations { get; set; }
 
-    // Tenant Management
+    // DbSets requeridos por ITenantManagementDbContext
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
-    #endregion
-
-    public SeriesAppDbContext(DbContextOptions<SeriesAppDbContext> options)
-        : base(options)
-    {
-
-    }
+    public SeriesAppDbContext(DbContextOptions<SeriesAppDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        /* Include modules to your migration db context */
+        // Configuraciones de los módulos ABP
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
         builder.ConfigureBackgroundJobs();
@@ -73,16 +62,10 @@ public class SeriesAppDbContext :
         builder.ConfigureTenantManagement();
         builder.ConfigureBlobStoring();
 
-        /* Configure your own tables/entities inside here */
+        // Configuración de entidades personalizadas
         builder.Entity<User>(b =>
         {
             b.ToTable(SeriesAppConsts.DbTablePrefix + "Users", SeriesAppConsts.DbSchema);
-            b.ConfigureByConvention();
-        });
-
-        builder.Entity<Administrator>(b =>
-        {
-            b.ToTable(SeriesAppConsts.DbTablePrefix + "Administrators", SeriesAppConsts.DbSchema);
             b.ConfigureByConvention();
         });
 
@@ -127,6 +110,12 @@ public class SeriesAppDbContext :
                 .WithMany()
                 .HasForeignKey("SerieId")
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<ApiLog>(b =>
+        {
+            b.ToTable(SeriesAppConsts.DbTablePrefix + "ApiLogs", SeriesAppConsts.DbSchema);
+            b.ConfigureByConvention();
         });
     }
 }

@@ -10,25 +10,29 @@ namespace SeriesApp.Entities
         public string Genre { get; set; }
         public int Duration { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public string Director { get; set; } // Nuevo
+        public string Writer { get; set; } // Nuevo
         public string Cast { get; set; }
-        public Blob Poster { get; set; }
+        public string Poster { get; set; }
         public string CountryOrigin { get; set; }
-        public float RatingImdb { get; set; }
+        public decimal RatingImdb { get; set; } // Cambia float a decimal para mayor precisión
 
-        private Serie() {} 
+        private Serie() { }
 
-        public Serie(Guid id, string title, string genre, int duration, DateTime releaseDate, string cast,
-            Blob poster, string countryOrigin, float ratingimdb) : base(id)
+        public Serie(Guid id, string title, string genre, int duration, DateTime releaseDate,
+            string director, string writer, string cast, string poster, string countryOrigin, decimal ratingImdb)
+            : base(id)
         {
             Title = title;
             Genre = genre;
-            ReleaseDate = releaseDate;
             Duration = duration;
+            ReleaseDate = releaseDate;
+            Director = director;
+            Writer = writer;
             Cast = cast;
             Poster = poster;
             CountryOrigin = countryOrigin;
-            RatingImdb = ratingimdb;
-            
+            RatingImdb = ratingImdb;
         }
     }
 }

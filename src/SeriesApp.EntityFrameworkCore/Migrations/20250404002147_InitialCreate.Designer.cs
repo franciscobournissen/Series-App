@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SeriesApp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace SeriesApp.Migrations
 {
     [DbContext(typeof(SeriesAppDbContext))]
-    partial class SeriesAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250404002147_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,33 +42,6 @@ namespace SeriesApp.Migrations
                     b.ToTable("AppTrackingListSeries", (string)null);
                 });
 
-            modelBuilder.Entity("SeriesApp.Entities.ApiLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Endpoint")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ErrorMessage")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsSuccess")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("RequestTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("ResponseTimeMs")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppApiLogs", (string)null);
-                });
-
             modelBuilder.Entity("SeriesApp.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -78,10 +54,6 @@ namespace SeriesApp.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NotificationType")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -154,10 +126,6 @@ namespace SeriesApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Director")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
@@ -174,17 +142,13 @@ namespace SeriesApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("RatingImdb")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<float>("RatingImdb")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Writer")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -204,9 +168,6 @@ namespace SeriesApp.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
@@ -250,15 +211,11 @@ namespace SeriesApp.Migrations
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("PreferencesNotification")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ProfilePicture")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -269,6 +226,8 @@ namespace SeriesApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -2092,6 +2051,13 @@ namespace SeriesApp.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
+            modelBuilder.Entity("SeriesApp.Entities.Administrator", b =>
+                {
+                    b.HasBaseType("SeriesApp.Entities.User");
+
+                    b.ToTable("AppAdministrators", (string)null);
+                });
+
             modelBuilder.Entity("SerieTrackingList", b =>
                 {
                     b.HasOne("SeriesApp.Entities.Serie", null)
@@ -2295,6 +2261,15 @@ namespace SeriesApp.Migrations
                     b.HasOne("Volo.Abp.TenantManagement.Tenant", null)
                         .WithMany("ConnectionStrings")
                         .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SeriesApp.Entities.Administrator", b =>
+                {
+                    b.HasOne("SeriesApp.Entities.User", null)
+                        .WithOne()
+                        .HasForeignKey("SeriesApp.Entities.Administrator", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

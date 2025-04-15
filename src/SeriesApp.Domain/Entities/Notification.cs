@@ -10,15 +10,18 @@ namespace SeriesApp.Entities
         public string Message { get; private set; }
         public DateTime Date { get; private set; }
         public bool IsRead { get; private set; }
-        
-        private Notification() {}
+        public string NotificationType { get; private set; } // Ejemplo: "NewEpisode", "Cancellation"
 
-        public Notification(Guid id, User user, string message, DateTime date, bool isRead) : base(id)
+        private Notification() { }
+
+        public Notification(Guid id, User user, string message, DateTime date, bool isRead, string notificationType)
+            : base(id)
         {
             User = user;
             Message = message;
             Date = date;
             IsRead = isRead;
+            NotificationType = notificationType;
         }
     }
 }
