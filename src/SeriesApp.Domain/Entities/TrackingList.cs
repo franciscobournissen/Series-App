@@ -8,6 +8,7 @@ namespace SeriesApp.Entities
     {
         public User User { get; set; }
         public List<Serie> Series { get; set; } = new List<Serie>();
+        public DateTime CreatedAt { get; set; } // Opcional
 
         private TrackingList() { }
 
@@ -15,6 +16,7 @@ namespace SeriesApp.Entities
         {
             User = user;
             Series = new List<Serie>();
+            CreatedAt = DateTime.UtcNow;
         }
     }
 }
