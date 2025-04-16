@@ -33,6 +33,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Microsoft.AspNetCore.Hosting;
+using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Identity;
 using Volo.Abp.OpenIddict;
@@ -91,6 +92,11 @@ public class SeriesAppHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
+        Configure<AbpMvcLibsOptions>(options =>
+        {
+            options.CheckLibs = false; // Desactiva la verificación de wwwroot/libs
+        });
+        
         if (!configuration.GetValue<bool>("App:DisablePII"))
         {
             Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
