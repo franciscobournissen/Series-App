@@ -150,7 +150,7 @@ namespace SeriesApp.Migrations
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<string>("CountryOrigin")
+                    b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -170,12 +170,12 @@ namespace SeriesApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<decimal>("ImdbRating")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<string>("Poster")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<decimal>("RatingImdb")
-                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime(6)");
