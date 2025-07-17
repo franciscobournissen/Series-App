@@ -36,6 +36,7 @@ public class UserAppService : ApplicationService, IUserAppService
     public async Task<UserDto> CreateAsync(CreateUserInput input)
     {
         var hashedPassword = _passwordHasher.HashPassword(null, input.Password);
+
         var user = new User(
             id: Guid.NewGuid(),
             userName: input.UserName,
@@ -43,14 +44,17 @@ public class UserAppService : ApplicationService, IUserAppService
             passwordHash: hashedPassword,
             isAdmin: input.IsAdmin,
             isActive: true,
-            preferencesNotification: input.PreferencesNotification ?? "screen", // por ahora vacío
+            preferencesNotification: string.IsNullOrWhiteSpace(input.PreferencesNotification)
+                ? "screen"
+                : input.PreferencesNotification,
             profilePicture: input.ProfilePicture
         );
-        
-        await _userRepository.InsertAsync(user);
+
+        await _userRepository.InsertAsync(user, autoSave: true);
 
         return ObjectMapper.Map<User, UserDto>(user);
     }
+
 
     public async Task DeleteAsync(Guid id)
     {
