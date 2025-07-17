@@ -1,0 +1,18 @@
+<div class="search-form">
+    <h2>Buscar Series</h2>
+    <input [(ngModel)]="title" placeholder="Título de la serie" />
+    <input [(ngModel)]="genre" placeholder="Género" />
+    <button (click)="search()">Buscar</button>
+  </div>
+  
+  <div *ngIf="isLoading">Buscando...</div>
+  
+  <div *ngIf="results.length > 0">
+    <h3>Resultados:</h3>
+    <ul>
+      <li *ngFor="let serie of results">
+        {{ serie.title }} ({{ serie.genre }})
+      </li>
+    </ul>
+  </div>
+  

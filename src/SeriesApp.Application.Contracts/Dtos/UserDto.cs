@@ -10,4 +10,5 @@ public class UserDto
     public string Password { get; set; }
     public string ProfilePicture { get; set; }
     public bool IsAdmin { get; set; }
+    public string PreferencesNotification { get; set; }
 }
